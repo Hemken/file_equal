@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0   30Oct2017}{...}
+{* *! version 2.0   2Nov2017}{...}
 {viewerjumpto "Syntax" "file_equal##syntax"}{...}
 {viewerjumpto "Description" "file_equal##description"}{...}
 {viewerjumpto "Options" "file_equal##options"}{...}
@@ -98,8 +98,10 @@ If a complete range is provided in the {it:range} option, i.e. two
 {p 4} Social Science Computing Cooperative{p_end}
 {p 4} Univ of Wisc-Madison{p_end}
 {p 4} {browse "mailto:dehemken@wisc.edu":dehemken@wisc.edu}
+{p 4} https://www.ssc.wisc.edu/~hemken/Stataworkshops
+{p 4} https://github.com/Hemken/file_equal
 
-{p 4} modified from {cmd:tex_equal} by{p_end}
+{p 4} based on {cmd:tex_equal} by{p_end}
 {p 4} Santiago Garriga {p_end}
 {p 4} Facultad de Ciencias Económicas (UNLP - Argentina)  {p_end}
 {p 4} LCSPP - World Bank {p_end}
