@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0   2Nov2017}{...}
+{* *! version 2.2   7Nov2017}{...}
 {viewerjumpto "Syntax" "file_equal##syntax"}{...}
 {viewerjumpto "Description" "file_equal##description"}{...}
 {viewerjumpto "Options" "file_equal##options"}{...}
@@ -84,10 +84,10 @@ If a complete range is provided in the {it:range} option, i.e. two
 {marker stored}{title:Stored results}
 
 {p 4 2 1}
-{cmd:tex_equal} stores the following in {cmd:r()}:
+{cmd:file_equal} stores the following in {cmd:r()}:
 
 {synopt:{cmd:r(comparison)}}1 if files are the same, 0 otherwise{p_end}
-{synopt:{cmd:r(linenum)}}number of lines compared{p_end}
+{synopt:{cmd:r(lines)}}number of lines compared{p_end}
 {synopt:{cmd:r(ndif)}}number of differences if any{p_end}
 {synopt:{cmd:r(basefile)}}Name of {it:basefile}{p_end}
 {synopt:{cmd:r(using)}}Name of {it:filename}{p_end}

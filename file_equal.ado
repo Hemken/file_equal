@@ -1,4 +1,4 @@
-*! Version 2.0 - 2 November 2017                                             		
+*! Version 2.2.1 - 7 November 2017                                             		
 *! Author: Doug Hemken & Santiago Garriga                                                   
 *! dehemken@wisc.edu      
 
@@ -6,7 +6,7 @@
 /*===========================================================================
 	based on tex_equal: A program to compare ASCII text or binary files
 -----------------------------------------------------------------------
-Modified:		2 November 2017 Doug Hemken
+Modified:		7 November 2017 Doug Hemken
 Created: 		29Jul2014	    Santiago Garriga
 *===========================================================================*/
 //capture program drop file_equal
@@ -89,9 +89,9 @@ qui {
 	
 	* Display Files names
 	noi dis as text _new "{p 4 4 2}{cmd:base  file:} " ///
-		in y  "  `basefile'" `"{browse "`basefile'":{space 10}Open }"'" {p_end}" 
+		in y  "  `basefile'" `"{view "`basefile'":{space 10}Open }"'" {p_end}" 
 	noi dis as text "{p 4 4 2}{cmd:using file:} " ///
-		in y  "  `using'" `"{browse "`using'":{space 10}Open }"'" {p_end}" 
+		in y  "  `using'" `"{view "`using'":{space 10}Open }"'" {p_end}" 
 	noi dis as text "{hline}" 
 	
 	if "`display'" == "display" {
@@ -102,16 +102,16 @@ qui {
 		}
 		
 	noi mata:fcompare("`basefile'","`using'",`display',`start',`end')
-
+	
 	local dif = r(differences)
 	* Display Results
 	if `dif' == 0 {
-		noi di _skip(1) in g "Perfect comparison"
-		local comparison = 1
+		noi di _skip(1) in g "Perfect equal"
+		local equal = 1
 		//local dif = 0
 	}
 	else {
-		local comparison = 0
+		local equal = 0
 		if "`display'" == "1" noi dis as text "{hline}" 
 		noi di "Number of differences: `dif'"
 	}		
@@ -120,16 +120,15 @@ qui {
 	return local using "`using'"
 	return local basefile "`basefile'"
 	return scalar differences = `dif'
-	return scalar linenum = `linenum' - 1
-	return local comparison = `comparison'
+	return scalar lines = r(lines)
+	return scalar equal = `equal'
 
 }	
 
 end 
 
-mata
+mata:
 // compare (text) files
-mata drop fcompare()
 void fcompare(string scalar filename1, string scalar filename2, ///
 		numeric scalar show, numeric scalar first, numeric scalar last) {
 		// filename1 - first file to compare
@@ -165,6 +164,7 @@ void fcompare(string scalar filename1, string scalar filename2, ///
 	fclose(0)
 	fclose(1)
 	// finish and return
+	st_numscalar("r(lines)", linenum-1)
 	st_numscalar("r(differences)", differences)
 	}
 end
