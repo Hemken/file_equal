@@ -11,7 +11,6 @@ SUPPORT:    dehemken@wisc.edu
 
 HELP:       After installation, type
 
-
             . help file_equal
 
 FILES:
