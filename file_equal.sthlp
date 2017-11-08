@@ -38,13 +38,13 @@
 
 {pstd} {cmd:file_equal} compares the contents of {it:basefile} with {it:filename}. 
 The comparison is done line by line,
-i.e. line 1 in {it:basefile} against line 1 of {it:filename}. 
+i.e. line 1 in {it:basefile} against line 1 of {it:filename}. {p_end}
 
 {pstd} It is possible to compare just a portion of the file(s)
- using the {it:range} and/or {it:lines} options.
+ using the {it:range} and/or {it:lines} options.{p_end}
 
 {pstd} You can see the discrepancies between the files by using the
-{it:display} option.
+{it:display} option.{p_end}
 
 
 {marker options}
@@ -54,29 +54,29 @@ i.e. line 1 in {it:basefile} against line 1 of {it:filename}.
 
 {phang}
 {cmd: basename} name of the first file. Include the file extension,
-	i.e. .do, .ado, .txt, or anything else.
+	i.e. .do, .ado, .txt, or anything else.{p_end}
 
 {phang}
-{cmd: filename} name of the second file, including the file extension.
+{cmd: filename} name of the second file, including the file extension.{p_end}
    
 {dlgtab:Options}
 
 {phang}
 {cmd: display} show the discrepancies between files, if any. 
 	This presents the line number
-	and the complete text in each file at that line.
+	and the complete text in each file at that line.{p_end}
 	
 {phang}
 {cmd: range}{it:(#[ #])} specify a range of lines over which to compare. If
- two integers are specified, the comparison will be done over those lines of the files. 
+ two integers are specified, the comparison will be done over those lines of the files. {p_end}
  
 {pmore}
  If one integer
- is specified, the comparison begins at line #.
+ is specified, the comparison begins at line #.{p_end}
  
 {pmore}
  If one integer is specified along with the {it:lines} option, lines # through (# + lines - 1)
- are compared.
+ are compared.{p_end}
 
 {phang}
 {cmd: lines}{it:(#)} The number of lines to compare - defaults to all lines.
@@ -87,13 +87,13 @@ If a complete {it:range} is provided (i.e. two
 {marker remarks}
 {title:Remarks}
 
-{pstd}Specify lines(#) to compare  from the start through line #.
+{pstd}Specify lines(#) to compare  from the start through line #.{p_end}
 
-{pstd}Specify range(#) to compare from line # to the end.
+{pstd}Specify range(#) to compare from line # to the end.{p_end}
 
-{pstd}Specify range(# ##) to compare from line # through line ##.
+{pstd}Specify range(# ##) to compare from line # through line ##.{p_end}
 
-{pstd}Specify range(#) lines(##) to compare from line # through line # + ## - 1.
+{pstd}Specify range(#) lines(##) to compare from line # through line # + ## - 1.{p_end}
 
 
 {marker stored}
@@ -103,9 +103,9 @@ If a complete {it:range} is provided (i.e. two
 {cmd:file_equal} stores the following in {cmd:r()}:
 
 {syntab:Scalars}
-{synopt:{cmd:r(comparison)}}1 if files are the same, 0 otherwise{p_end}
+{synopt:{cmd:r(equal)}}1 if files are the same, 0 otherwise{p_end}
 {synopt:{cmd:r(lines)}}number of lines compared{p_end}
-{synopt:{cmd:r(ndif)}}number of differences if any{p_end}
+{synopt:{cmd:r(differences)}}number of differences if any{p_end}
 {syntab:Macros}
 {synopt:{cmd:r(basefile)}}Name of {it:basefile}{p_end}
 {synopt:{cmd:r(using)}}Name of {it:filename}{p_end}
