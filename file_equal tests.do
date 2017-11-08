@@ -1,15 +1,55 @@
+cscript 
+
 local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
 local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"
 
+capture file_equal
+assert _rc != 0
+capture file_equal "`f1'"
+assert _rc != 0
+capture file_equal using "`f1'"
+assert _rc != 0
+
 file_equal "`f1'" using "`f2'"
-di r(ndif)
+assert         r(equal)       == 0
+assert         r(lines)       == 19
+assert         r(differences) == 8
 
-file_equal "`f1'" using "`f2'", display
-di r(ndif)
+local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
+local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"
 
-file_equal "`f1'" using "`f2'", range(1 5)
-file_equal "`f1'" using "`f2'", display range(1 5)
-file_equal "`f1'" using "`f2'", display range(2 5)
+file_equal "`f1'" using "`f2'", lines(3) // 2
+assert         r(equal)       == 0
+assert         r(lines)       == 3
+assert         r(differences) == 2
+
+file_equal "`f1'" using "`f2'", range(4) // 6
+assert         r(equal)       == 0
+assert         r(lines)       == 16
+assert         r(differences) == 6
+
+local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
+local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"
+
+capture file_equal "`f1'" using "`f2'", range(0)
+assert _rc != 0
+capture file_equal "`f1'" using "`f2'", range(-1)
+assert _rc != 0
+capture file_equal "`f1'" using "`f2'", range(3 1)
+assert _rc != 0
+
+local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
+local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"
+
+file_equal "`f1'" using "`f2'", range(5 9)
+assert         r(equal)       == 1
+assert         r(lines)       == 5
+assert         r(differences) == 0
+
+file_equal "`f1'" using "`f2'", range(5) lines(5)
+assert         r(equal)       == 1
+assert         r(lines)       == 5
+assert         r(differences) == 0
 
 local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
 local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"

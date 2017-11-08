@@ -65,8 +65,8 @@ if "`start'" == "" local start = 1
 if "`end'" == "" local end = .
 		
 *------------------------------------1.3: Program --------------------------------------------------
-qui {
-	tempname in1 in2	// Generate temporary names for file handles
+quietly {
+	//tempname in1 in2	// Generate temporary names for file handles
 	
 	* Display Files names
 	noi dis as text _new "{p 4 4 2}{cmd:base  file:} " ///
@@ -82,7 +82,7 @@ qui {
 		local display = 0
 		}
 		
-	noi mata:fcompare("`basefile'","`using'",`display',`start',`end')
+	noisily mata:fcompare("`basefile'","`using'",`display',`start',`end')
 	
 	local dif = r(differences)
 	* Display Results
@@ -101,7 +101,7 @@ qui {
 	return local using "`using'"
 	return local basefile "`basefile'"
 	return scalar differences = `dif'
-	return scalar lines = r(lines)
+	return scalar lines = r(lines) - `start' + 1
 	return scalar equal = `equal'
 
 }	
