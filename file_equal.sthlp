@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.2   7Nov2017}{...}
+{* *! version 2.2   8Nov2017}{...}
 {* *! Doug Hemken}{...}
 {viewerjumpto "Syntax" "file_equal##syntax"}{...}
 {viewerjumpto "Description" "file_equal##description"}{...}
@@ -28,7 +28,7 @@
 {synopthdr}
 {synoptline}
 {synopt :{opt display}}Display any differences.{p_end}
-{synopt :{opt range}(#[/#])}Line range to compare.{p_end}
+{synopt :{opt range}(#[ #])}Line range to compare.{p_end}
 {synopt :{opt lines}(integer)}Number of lines to compare.{p_end}
 {synoptline}
 
@@ -67,7 +67,7 @@ i.e. line 1 in {it:basefile} against line 1 of {it:filename}.
 	and the complete text in each file at that line.
 	
 {phang}
-{cmd: range}{it:(#[/#])} specify a range of lines over which to compare. If
+{cmd: range}{it:(#[ #])} specify a range of lines over which to compare. If
  two integers are specified, the comparison will be done over those lines of the files. 
  
 {pmore}
@@ -75,7 +75,7 @@ i.e. line 1 in {it:basefile} against line 1 of {it:filename}.
  is specified, the comparison begins at line #.
  
 {pmore}
- If one integer is specified along with the {it:lines} option, lines # through (# + lines)
+ If one integer is specified along with the {it:lines} option, lines # through (# + lines - 1)
  are compared.
 
 {phang}
@@ -91,9 +91,9 @@ If a complete {it:range} is provided (i.e. two
 
 {pstd}Specify range(#) to compare from line # to the end.
 
-{pstd}Specify range(#/##) to compare from line # through line ##.
+{pstd}Specify range(# ##) to compare from line # through line ##.
 
-{pstd}Specify range(#) lines(##) to compare from line # through line # + ##.
+{pstd}Specify range(#) lines(##) to compare from line # through line # + ## - 1.
 
 
 {marker stored}

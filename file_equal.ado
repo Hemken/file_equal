@@ -1,83 +1,64 @@
-*! Version 2.2.1 - 7 November 2017                                             		
-*! Author: Doug Hemken & Santiago Garriga                                                   
-*! dehemken@wisc.edu      
+*! Version 2.2.2 - 8 November 2017                                             		
+*! Author: Doug Hemken (& Santiago Garriga)
+*! dehemken@wisc.edu
 
-
-/*===========================================================================
-	based on tex_equal: A program to compare ASCII text or binary files
------------------------------------------------------------------------
-Modified:		7 November 2017 Doug Hemken
-Created: 		29Jul2014	    Santiago Garriga
-*===========================================================================*/
-//capture program drop file_equal
 program define file_equal, rclass
 	version 8
-	syntax anything(name=basefile)						///
-		using/ 											///
-		[,												///
-			Display										///
-			Range(numlist min=1 max=2)					///
-			Lines(numlist max=1)						///
+	syntax anything(name=basefile)					///
+		using/ 										///
+		[,											///
+			Display									///
+			Range(numlist min=1 max=2)				///
+			Lines(numlist max=1)					///
 		]
 
-*------------------------------------1.1: Error Messages ------------------------------------------
+* File Errors --------------
 	local basefile = ustrtrim(usubinstr(`"`basefile'"', `"""', "", .))
+	// confirm requires local files
 	confirm file `"`basefile'"'
 	local using = ustrtrim("`using'")
 	confirm file "`using'"
+	//display "  {it: Checked files} - OK"
 	
-* Range values greater than one - No more than two range values
+* Range Defaults and Errors --------------
 if ("`range'" != "" ) {
-	if (wordcount("`range'") == 1) {
-		if `range' < 1	{
-			disp in red "Only positive integers are valid in the range option"
-			error			
-		}
-	} //  range == 1
-	if (wordcount("`range'") == 2) {
-		local start: word 1 of `range'
+	local start: word 1 of `range'
+	if (`start' < 1 ) {
+		display {error: "  Range must be positive."}
+		error			
+	}
+	else if (wordcount("`range'") == 2) {
+		//local start: word 1 of `range'
 		local end: word 2 of `range'
-		if `start' < 1	{
-			disp in red "Only positive integers are valid in the range option"
+		if `start' >= `end' {
+			display {error: "  Range end must be >= start."}
 			error			
 		}
-	if `start' >= `end' {
-			disp in red "The start must be less than the end in the range option"
-			error			
-		}
-	} //  range == 2
+	}
+	//display "  {it: Checked range option} - OK"
 }
 
-* Lines greater than zero - No more than one line value
+* Lines Defaults and Errors --------------
 if ("`lines'" != "" ) {
-	if (wordcount("`lines'") == 1) {
-		if `lines' < 0	{
-			disp in red "Only positive integers are valid in the lines option"
+		if (`lines' <= 0) {
+			display {error: "  Lines must be positive."}
 			error			
 		}
-	} //  lines == 1
-	if (wordcount("`lines'") > 2) {	
-		disp in red "Only one number may be specified in the lines option"
-		error
-	}	//  lines > 1
-	if (wordcount("`range'") == 2) & (wordcount("`lines'") == 1){	
-		disp in red "The lines option was ignored"
+	else if (wordcount("`range'") == 2) {	
+		display {error: "  The lines option was ignored"}
 		local lines ""
-	}	
+	}
+	local end = `lines'
+	//display "  {it: Checked lines option} - OK"
 }
 
 
 *------------------------------------1.2: Default Options ------------------------------------------
 * Range and lines (default option for the range)
 if ("`range'" != "" ) {
-	local start: word 1 of `range'
 	if (wordcount("`range'") == 1) & (wordcount("`lines'") == 1)	{
-		local end = `start' + `lines'
-	} //  range == 1
-	else {
-		local end: word 2 of `range'
-		local lines = `end' - `start'
-	} // range == 2
+		local end = `start' + `lines' - 1
+	}
 }
 
 if "`start'" == "" local start = 1
