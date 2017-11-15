@@ -1,9 +1,9 @@
-*! Version 2.2.2 - 8 November 2017                                             		
+*! Version 2.2.3 - 15 November 2017                                             		
 *! Author: Doug Hemken (& Santiago Garriga)
 *! dehemken@wisc.edu
 
 program define file_equal, rclass
-	version 8
+	version 10
 	syntax anything(name=basefile)					///
 		using/ 										///
 		[,											///
@@ -66,8 +66,6 @@ if "`end'" == "" local end = .
 		
 *------------------------------------1.3: Program --------------------------------------------------
 quietly {
-	//tempname in1 in2	// Generate temporary names for file handles
-	
 	* Display Files names
 	noi dis as text _new "{p 4 4 2}{cmd:base  file:} " ///
 		in y  "  `basefile'" `"{view "`basefile'":{space 10}Open }"'" {p_end}" 
@@ -84,24 +82,26 @@ quietly {
 		
 	noisily mata:fcompare("`basefile'","`using'",`display',`start',`end')
 	
-	local dif = r(differences)
+	local diff = r(differences)
 	* Display Results
-	if `dif' == 0 {
-		noi di _skip(1) in g "Perfect equal"
+	if `diff' == 0 {
+		noi di _skip(1) in g "All equal"
 		local equal = 1
 		//local dif = 0
 	}
 	else {
 		local equal = 0
 		if "`display'" == "1" noi dis as text "{hline}" 
-		noi di "Number of differences: `dif'"
+		noi di "Number of differences: `diff'"
 	}		
 	
 	* Return values
 	return local using "`using'"
 	return local basefile "`basefile'"
-	return scalar differences = `dif'
+	return scalar differences = `diff'
 	return scalar lines = r(lines) - `start' + 1
+	return scalar end = `.'
+	return scalar start = `start'
 	return scalar equal = `equal'
 
 }	

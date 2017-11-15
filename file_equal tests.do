@@ -3,6 +3,7 @@ cscript
 local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
 local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"
 
+// These all fail by not specifying enough files
 capture file_equal
 assert _rc != 0
 capture file_equal "`f1'"
@@ -10,6 +11,7 @@ assert _rc != 0
 capture file_equal using "`f1'"
 assert _rc != 0
 
+// Files are NOT equal
 file_equal "`f1'" using "`f2'"
 assert         r(equal)       == 0
 assert         r(lines)       == 19
@@ -18,11 +20,13 @@ assert         r(differences) == 8
 local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
 local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"
 
+// First 3 lines NOT equal
 file_equal "`f1'" using "`f2'", lines(3) // 2
 assert         r(equal)       == 0
 assert         r(lines)       == 3
 assert         r(differences) == 2
 
+// Last 16 lines NOT equal
 file_equal "`f1'" using "`f2'", range(4) // 6
 assert         r(equal)       == 0
 assert         r(lines)       == 16
@@ -31,16 +35,20 @@ assert         r(differences) == 6
 local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
 local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"
 
+// BAD range specifications
 capture file_equal "`f1'" using "`f2'", range(0)
 assert _rc != 0
 capture file_equal "`f1'" using "`f2'", range(-1)
 assert _rc != 0
 capture file_equal "`f1'" using "`f2'", range(3 1)
 assert _rc != 0
+capture file_equal "`f1'" using "`f2'", range(5 .)
+assert _rc !=0
 
 local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
 local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"
 
+// some valid range specifications
 file_equal "`f1'" using "`f2'", range(5 9)
 assert         r(equal)       == 1
 assert         r(lines)       == 5

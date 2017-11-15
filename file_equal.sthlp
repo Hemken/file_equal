@@ -104,6 +104,8 @@ If a complete {it:range} is provided (i.e. two
 
 {syntab:Scalars}
 {synopt:{cmd:r(equal)}}1 if files are the same, 0 otherwise{p_end}
+{synopt:{cmd:r(start)}}line number where comparison starts{p_end}
+{synopt:{cmd:r(end)}}line number where comparison ends{p_end}
 {synopt:{cmd:r(lines)}}number of lines compared{p_end}
 {synopt:{cmd:r(differences)}}number of differences if any{p_end}
 {syntab:Macros}
