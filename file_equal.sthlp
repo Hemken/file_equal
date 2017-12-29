@@ -30,6 +30,7 @@
 {synopt :{opt display}}Display any differences.{p_end}
 {synopt :{opt range}(#[ #])}Line range to compare.{p_end}
 {synopt :{opt lines}(integer)}Number of lines to compare.{p_end}
+{synopt :{opt except}(numlist)}Line numbers to NOT compare.{p_end}
 {synoptline}
 
 
@@ -82,6 +83,10 @@ i.e. line 1 in {it:basefile} against line 1 of {it:filename}. {p_end}
 {cmd: lines}{it:(#)} The number of lines to compare - defaults to all lines.
 If a complete {it:range} is provided (i.e. two 
 	integers) this option is ignored.{p_end}
+
+{phang}
+{cmd: except}{it:(numlist)} The line numbers NOT to compare - the lines otherwise
+in the {it:range} to skip. {p_end}
 
 	
 {marker remarks}

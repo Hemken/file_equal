@@ -1,6 +1,9 @@
-*! Version 2.2.3 - 15 November 2017                                             		
-*! Author: Doug Hemken (& Santiago Garriga)
+*! Version 2.3.0
+*! 29 December 2017                                             		
+*! Doug Hemken (& Santiago Garriga)
 *! dehemken@wisc.edu
+
+// clean redundant error checking
 
 program define file_equal, rclass
 	version 10
@@ -8,8 +11,9 @@ program define file_equal, rclass
 		using/ 										///
 		[,											///
 			Display									///
-			Range(numlist min=1 max=2)				///
-			Lines(numlist max=1)					///
+			Range(numlist min=1 max=2 integer >0)	///
+			Lines(numlist max=1 integer >0)			///
+			EXcept(numlist integer >0)				///
 		]
 
 * File Errors --------------
@@ -40,9 +44,9 @@ if ("`range'" != "" ) {
 
 * Lines Defaults and Errors --------------
 if ("`lines'" != "" ) {
-		if (`lines' <= 0) {
-			display {error: "  Lines must be positive."}
-			error			
+	if (`lines' <= 0) {
+		display {error: "  Lines must be positive."}
+		error			
 		}
 	else if (wordcount("`range'") == 2) {	
 		display {error: "  The lines option was ignored"}
@@ -52,9 +56,7 @@ if ("`lines'" != "" ) {
 	//display "  {it: Checked lines option} - OK"
 }
 
-
-*------------------------------------1.2: Default Options ------------------------------------------
-* Range and lines (default option for the range)
+* Range and lines combined --------------
 if ("`range'" != "" ) {
 	if (wordcount("`range'") == 1) & (wordcount("`lines'") == 1)	{
 		local end = `start' + `lines' - 1
@@ -64,14 +66,16 @@ if ("`range'" != "" ) {
 if "`start'" == "" local start = 1
 if "`end'" == "" local end = .
 		
-*------------------------------------1.3: Program --------------------------------------------------
+* Process Files -------------------------
+
+* Display Results  ----------------------
 quietly {
-	* Display Files names
-	noi dis as text _new "{p 4 4 2}{cmd:base  file:} " ///
-		in y  "  `basefile'" `"{view "`basefile'":{space 10}Open }"'" {p_end}" 
-	noi dis as text "{p 4 4 2}{cmd:using file:} " ///
-		in y  "  `using'" `"{view "`using'":{space 10}Open }"'" {p_end}" 
-	noi dis as text "{hline}" 
+* Display Files names
+	noi display as text _new "{p 4 4 2}{cmd:base file:} " ///
+		"     `basefile'" `"{view "`basefile'":{space 10}Open }"'" {p_end}" 
+	noi display as text "{p 4 4 2}{cmd:using file:} " ///
+		"  `using'" `"{view "`using'":{space 10}Open }"'" {p_end}" 
+	noi display as text "{hline}" 
 	
 	if "`display'" == "display" {
 		local display = 1 
@@ -80,10 +84,10 @@ quietly {
 		local display = 0
 		}
 		
-	noisily mata:fcompare("`basefile'","`using'",`display',`start',`end')
+	noisily mata:fcompare("`basefile'","`using'",`display',`start',`end', "`except'")
 	
+		
 	local diff = r(differences)
-	* Display Results
 	if `diff' == 0 {
 		noi di _skip(1) in g "All equal"
 		local equal = 1
@@ -98,9 +102,10 @@ quietly {
 	* Return values
 	return local using "`using'"
 	return local basefile "`basefile'"
+	return local except "`except'"
 	return scalar differences = `diff'
 	return scalar lines = r(lines) - `start' + 1
-	return scalar end = `.'
+	return scalar end = `end'
 	return scalar start = `start'
 	return scalar equal = `equal'
 
@@ -111,15 +116,26 @@ end
 mata:
 // compare (text) files
 void fcompare(string scalar filename1, string scalar filename2, ///
-		numeric scalar show, numeric scalar first, numeric scalar last) {
+		numeric scalar show, numeric scalar first, numeric scalar last, ///
+		| string scalar except) {
 		// filename1 - first file to compare
 		// filename2 - second file to compare
 		// show - 0/1 whether to display differences
 		// first - first line to compare, 1/n
 		// last - last line to compare, 1/.
+		// except - list of lines to skip, 1/n, optional
 		
 	fh1 = fopen(filename1, "r")
 	fh2 = fopen(filename2, "r")
+	
+	if (except == "") {
+		skips = 0
+		}
+		else {
+		skips = strtoreal(tokens(except))
+		}
+	//printf("skips="); skips
+	
 	// initialize
 	differences = 0
 	linenum = 1
@@ -130,8 +146,11 @@ void fcompare(string scalar filename1, string scalar filename2, ///
 			}
 		}
 	// compare
+	
 	while ((line1=fget(fh1))!=J(0,0,"") & (line2=fget(fh2))!=J(0,0,"") & ///
 			linenum>=1 & linenum <= last) {
+		if (cols(select(1..cols(skips), linenum:==skips))==0) {
+		//cols(select(1..cols(skips), linenum:==skips)) ==0
 		if (line1 != line2) {
 			differences++
 			if (show) {
@@ -140,8 +159,10 @@ void fcompare(string scalar filename1, string scalar filename2, ///
 				printf("%s\n", "") 
 				}
 		    }
+			}
 		linenum++
         }
+	
 	fclose(0)
 	fclose(1)
 	// finish and return

@@ -17,8 +17,9 @@ assert         r(equal)       == 0
 assert         r(lines)       == 19
 assert         r(differences) == 8
 
-local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
-local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"
+cd "Z:\PUBLIC_web\Stataworkshops\"
+local f1 "stdBeta\README.txt"
+local f2 "file_equal\README.txt"
 
 // First 3 lines NOT equal
 file_equal "`f1'" using "`f2'", lines(3) // 2
@@ -66,6 +67,22 @@ file_equal "`f1'" using "`f2'", lines(3) display // 2
 file_equal "`f1'" using "`f2'", range(4) display // 6
 file_equal "`f1'" using "`f2'", range(1 3) display
 file_equal "`f1'" using "`f2'", range(3) display // r(ndif)==7
+
+
+// First 3 lines NOT equal, but third line is one of them
+local f1 "Z:\PUBLIC_web\Stataworkshops\stdBeta\README.txt"
+local f2 "Z:\PUBLIC_web\Stataworkshops\file_equal\README.txt"
+
+file_equal "`f1'" using "`f2'", lines(3) except(3) // 
+
+assert `"`r(except)'"'   == `"3"'
+assert         r(equal)       == 0
+assert         r(start)       == 1
+assert         r(end)         == 3
+assert         r(lines)       == 3
+assert         r(differences) == 1
+
+
 
 /*
 mata: fcompare("`f1'", "`f2'", 1, 0, .)
